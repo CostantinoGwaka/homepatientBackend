@@ -1,0 +1,26 @@
+<?php
+session_start();
+session_regenerate_id(true);
+include('../includes/config.php');
+if(isset($_POST['doctor_id']))
+{
+	$doctor_id=$_POST['doctor_id'];
+	$sql ="SELECT * FROM patient WHERE doctor_id=:doctor_id";
+	$query= $dbh -> prepare($sql);
+	$query-> bindParam(':doctor_id', $doctor_id, PDO::PARAM_STR);
+	$query-> execute();
+	$results=$query->fetchAll(PDO::FETCH_OBJ);
+	if($query->rowCount() > 0)
+	{
+
+		echo json_encode($results);
+		
+	}else{
+		echo json_encode(404);
+	}
+
+}else{
+	echo json_encode(500);
+}
+
+?>
